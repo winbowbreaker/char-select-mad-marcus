@@ -48,7 +48,7 @@ end
 
 hook_mario_action(ACT_MARCUS_TOPPLE, act_marcus_topple)
 
-marcuslandtable = { -- saul twirl table
+marcuslandtable = { -- marcus shake table
     [ACT_JUMP_LAND] = true,
     [ACT_DOUBLE_JUMP_LAND] = true,
     [ACT_TRIPLE_JUMP_LAND] = true,
@@ -70,7 +70,6 @@ function marcus_set_action(m)
             cur_obj_shake_screen(SHAKE_POS_LARGE)
             cur_obj_shake_screen(SHAKE_POS_LARGE)
             cur_obj_shake_screen(SHAKE_POS_LARGE)
-            spawn_sync_object(id_bhvBowserShockWave, E_MODEL_BOWSER_WAVE, m.pos.x, m.pos.y, m.pos.z, nil)
         end
         if marcuslandtable[m.action] ~= nil then
             cur_obj_shake_screen(SHAKE_POS_SMALL)
