@@ -74,7 +74,6 @@ extern Lights1 marcusmad_Cap_Inside__CAP__lights;
 extern Lights1 marcusmad_Shoes__SHOES__lights;
 extern u8 marcusmad_mario_overalls_button_rgba16_rgba16[];
 extern u8 marcusmad_Metal_Shade_rgba16_rgba16[];
-extern u8 marcusmad_Metal_Light_rgba16_rgba16[];
 extern u8 marcusmad_marcuseyes_ci8[];
 extern u8 marcusmad_marcuseyes_pal_rgba16[];
 extern u8 marcusmad_mario_mustache_rgba16_rgba16[];
