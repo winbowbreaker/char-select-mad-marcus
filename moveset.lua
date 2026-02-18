@@ -12,10 +12,35 @@ for i = 0, MAX_PLAYERS do
     c.savedmomentum = 0
     c.brownieseaten = 0
     c.jumptimer = -5
-
     c.toppleVel = 0
     c.toppleCooldown = 0
 end
+
+local gStateExtras = {}
+for i = 0, MAX_PLAYERS - 1 do
+    gStateExtras[i] = {}
+    local m = gMarioStates[i]
+    local e = gStateExtras[i]
+    e.rotAngle = 0
+    e.HasMarctwirled = false
+end
+
+ACT_MARC_TWIRL = allocate_mario_action(ACT_GROUP_AIRBORNE | ACT_FLAG_AIR)
+
+function act_marc_twirl(m)
+    local e = gStateExtras[m.playerIndex]
+    common_air_action_step(m, ACT_JUMP_LAND, CHAR_ANIM_TWIRL, AIR_STEP_CHECK_LEDGE_GRAB)
+    set_character_animation(m, CHAR_ANIM_TWIRL)
+    e.rotAngle = e.rotAngle + 6500
+    m.marioObj.header.gfx.angle.y = e.rotAngle
+    m.actionTimer = m.actionTimer + 1
+    m.vel.y = m.vel.y / 1.8
+    if m.actionTimer > 7 then
+    m.action = ACT_FREEFALL
+    e.HasMarctwirled = true
+    end
+end
+hook_mario_action(ACT_MARC_TWIRL, act_marc_twirl)
 
 local ACT_MARCUS_TOPPLE = allocate_mario_action(ACT_GROUP_STATIONARY)
 
@@ -63,6 +88,16 @@ marcuslandtable = { -- marcus shake table
     [ACT_FORWARD_GROUND_KB] = true,
 }
 
+marctwirltable = {
+    [ACT_JUMP] = true,
+    [ACT_DOUBLE_JUMP] = true,
+    [ACT_TRIPLE_JUMP] = true,
+    [ACT_FREEFALL] = true,
+    [ACT_SIDE_FLIP] = true,
+    [ACT_BACKFLIP] = true,
+    [ACT_WALL_KICK_AIR] = true,
+}
+
 function marcus_set_action(m)
     if m.playerIndex == 0 then
         local c = gMarcusstates[m.playerIndex]
@@ -93,9 +128,24 @@ function marcus_before_action(m, inc)
     if replace[inc] then return replace[inc] end
 end
 
+local MARC_TWIRL = audio_sample_load("madtwirl.mp3")
+
 function marcus_update(m)
     local c = gMarcusstates[m.playerIndex]
+    local e = gStateExtras[m.playerIndex]
     if m.playerIndex == 0 then
+
+        if m.action == ACT_WALKING or m.action == ACT_HOLD_WALKING or m.action == ACT_HOLD_HEAVY_WALKING or m.action == ACT_METAL_WATER_WALKING or m.action == ACT_HOLD_METAL_WATER_WALKING then
+        cur_obj_shake_screen(SHAKE_POS_BOWLING_BALL)
+        end
+
+        if m.input & INPUT_A_PRESSED ~= 0 and e.HasMarctwirled == false and marctwirltable[m.action] == true and m.vel.y < 0 then
+        set_mario_action(m, ACT_MARC_TWIRL, 0)
+        audio_sample_play(MARC_TWIRL, m.pos, get_volume_sfx() / 76)
+        end
+        if m.pos.y == m.floorHeight or marcuslandtable[m.action] == true then
+        e.HasMarctwirled = false
+        end
 
         --beta groundpound
         if m.action == ACT_GROUND_POUND and m.prevAction ~= ACT_FLYING then -- is mario ground pounding

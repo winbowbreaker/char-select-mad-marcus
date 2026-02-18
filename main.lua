@@ -124,6 +124,34 @@ local voices = {
     [VOICETABLE_MADMAN] = 1
 }
 
+local MARC_COIN = audio_sample_load("madcoins.mp3")
+local MARCREDCOIN = audio_sample_load("madredcoins.mp3")
+
+local function marcusmadness(id)
+    if _G.charSelect.character_get_current_number(0) ~= CT_MADMARCUS then return end
+
+    local m = gMarioStates[0]
+    local soundPos = m.pos --m.marioObj.header.gfx.cameraToObject
+    local vol = 1
+    
+    if id == SOUND_GENERAL_COIN or id == SOUND_GENERAL_COIN_WATER then
+        audio_sample_play(MARC_COIN, soundPos, vol)
+        return NO_SOUND
+    end
+    if id == SOUND_MENU_COLLECT_RED_COIN
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x10000
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x20000
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x30000
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x40000
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x50000
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x60000
+    or id == SOUND_MENU_COLLECT_RED_COIN + 0x70000 then
+        audio_sample_play(MARCREDCOIN, soundPos, vol)
+        return NO_SOUND
+    end
+end
+
+
 local function on_character_sound(m, sound)
     if not CSloaded then return end
     if voices[_G.charSelect.character_get_voice(m)] then return _G.charSelect.voice.sound(m, sound) end
@@ -134,6 +162,7 @@ local function on_character_snore(m)
     if voices[_G.charSelect.character_get_voice(m)] then return _G.charSelect.voice.snore(m) end
 end
 
+hook_event(HOOK_ON_PLAY_SOUND, marcusmadness)
 hook_event(HOOK_ON_MODS_LOADED, on_character_select_load)
 hook_event(HOOK_CHARACTER_SOUND, on_character_sound)
 hook_event(HOOK_MARIO_UPDATE, on_character_snore)
