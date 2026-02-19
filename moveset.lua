@@ -88,6 +88,16 @@ marcuslandtable = { -- marcus shake table
     [ACT_FORWARD_GROUND_KB] = true,
 }
 
+marcusjumptable = { -- marcus shake table
+    [ACT_JUMP] = true,
+    [ACT_DOUBLE_JUMP] = true,
+    [ACT_TRIPLE_JUMP] = true,
+    [ACT_SIDE_FLIP] = true,
+    [ACT_BACKFLIP] = true,
+    [ACT_WALL_KICK_AIR] = true,
+    [ACT_LONG_JUMP] = true,
+}
+
 marctwirltable = {
     [ACT_JUMP] = true,
     [ACT_DOUBLE_JUMP] = true,
@@ -134,6 +144,11 @@ function marcus_update(m)
     local c = gMarcusstates[m.playerIndex]
     local e = gStateExtras[m.playerIndex]
     if m.playerIndex == 0 then
+
+        if marcusjumptable[m.action] ~= nil then
+            m.vel.y = m.vel.y * 0.975
+            m.vel.y = m.vel.y + 0.85
+        end
 
         if m.action == ACT_WALKING or m.action == ACT_HOLD_WALKING or m.action == ACT_HOLD_HEAVY_WALKING or m.action == ACT_METAL_WATER_WALKING or m.action == ACT_HOLD_METAL_WATER_WALKING then
         cur_obj_shake_screen(SHAKE_POS_BOWLING_BALL)
