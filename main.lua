@@ -18,10 +18,14 @@ if not _G.charSelectExists then
     return 0
 end
 
-local E_MODEL_CUSTOM_MODEL = smlua_model_util_get_id("marcusmad_geo") -- main costume
+local E_MODEL_MARCUSMAD = smlua_model_util_get_id("marcusmad_geo") -- main costume
+
+local E_MODEL_LARRYLAD  = smlua_model_util_get_id("ladlarry_geo")
 
 --icons
-local TEX_CUSTOM_LIFE_ICON = get_texture_info("mad-micon")
+local TEX_MARCICON = get_texture_info("mad-micon")
+
+local TEX_LARCICON = get_texture_info("laricon")
 
 -- All Located in "sound" Name them whatever you want. Remember to include the .ogg extension
 local VOICETABLE_MADMAN = {
@@ -90,21 +94,38 @@ local PALETTE_MARCUS = {
     [EMBLEM] = "000000"
 }
 
+local PALETTE_LARRY = {
+    name = "larry",
+    [PANTS]  = "387C8E",
+    [SHIRT]  = "9ABC3F",
+    [GLOVES] = "FFFFFF",
+    [SHOES]  = "8B062A",
+    [HAIR]   = "8B062A",
+    [SKIN]   = "FEC179" ,
+    [CAP]    = "9ABC3F",
+    [EMBLEM] = "000000"
+}
+
 --tanner skin E59D5D
 
 local CSloaded = false
 local function on_character_select_load()
-    CT_MADMARCUS = _G.charSelect.character_add("Mad Marcus", {"he was in my copy of mario wii -", "and now he's here, to jumpscare me!"}, "WinbowBreaker Charlotte", "E13A00", E_MODEL_CUSTOM_MODEL, CT_MARIO, TEX_CUSTOM_LIFE_ICON, 1.15, nil)
+    CT_MADMARCUS = _G.charSelect.character_add("Mad Marcus", {"he was in my copy of mario wii -", "and now he's here, to jumpscare me!"}, "WinbowBreaker Charlotte", "E13A00", E_MODEL_MARCUSMAD, CT_MARIO, TEX_MARCICON, 1.15, nil)
+    CT_LARRYLAD  = _G.charSelect.character_add("Lad Larry" , {"he is very lad, marcus brother"}, "WinbowBreaker Charlotte, Kaktus64, Saultube", "9ABC3F", E_MODEL_LARRYLAD, CT_LUIGI, TEX_LARCICON, 1, nil)
 
     _G.charSelect.character_set_category(CT_MADMARCUS, "DXA")
     _G.charSelect.character_set_category(CT_MADMARCUS, "Squishy Workshop")
+    _G.charSelect.character_set_category(CT_LARRYLAD, "DXA")
+    _G.charSelect.character_set_category(CT_LARRYLAD, "Squishy Workshop")
 
-    local CSMARCFITTI = get_texture_info("marcfitti")
-    _G.charSelect.character_add_graffiti(CT_MADMARCUS, CSMARCFITTI)
+    _G.charSelect.character_add_graffiti(CT_MADMARCUS, get_texture_info("marcfitti"))
+    _G.charSelect.character_add_graffiti(CT_LARRYLAD, get_texture_info("larryfitti"))
 
-    _G.charSelect.character_add_voice(E_MODEL_CUSTOM_MODEL, VOICETABLE_MADMAN)
-    _G.charSelect.character_add_animations(E_MODEL_CUSTOM_MODEL, ANIMTABLE_MADMANIMATION)
-    _G.charSelect.character_add_palette_preset(E_MODEL_CUSTOM_MODEL, PALETTE_MARCUS, "malus malus italicus")
+    _G.charSelect.character_add_voice(E_MODEL_MARCUSMAD, VOICETABLE_MADMAN)
+    _G.charSelect.character_add_animations(E_MODEL_MARCUSMAD, ANIMTABLE_MADMANIMATION)
+    _G.charSelect.character_add_palette_preset(E_MODEL_MARCUSMAD, PALETTE_MARCUS, "malus malus italicus")
+
+    _G.charSelect.character_add_palette_preset(E_MODEL_LARRYLAD, PALETTE_LARRY, "that's lad")
 
     alts = {}
     add_moveset()
